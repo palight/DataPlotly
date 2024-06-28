@@ -62,5 +62,6 @@ class HistogramFactory(PlotType):
 
         layout['barmode'] = settings.layout['bar_mode']
         layout['bargroupgap'] = settings.layout['bargaps']
+        layout['xaxis']['categoryorder'] = settings.layout['bar_sort']
 
         return layout
