@@ -732,7 +732,17 @@ class DataPlotlyPanelWidget(QgsPanelWidget, WIDGET):  # pylint: disable=too-many
         self.bar_mode_combo.addItem(self.tr('Grouped'), 'group')
         self.bar_mode_combo.addItem(self.tr('Stacked'), 'stack')
         self.bar_mode_combo.addItem(self.tr('Overlay'), 'overlay')
-
+     
+        # BarPlot value sorting
+        self.bar_sort_combo.clear()
+        self.bar_sort_combo.addItem(self.tr('None'), 'trace')
+        self.bar_sort_combo.addItem(self.tr('Descending'), 'total descending')
+        self.bar_sort_combo.addItem(self.tr('Ascending'), 'total ascending')
+        self.bar_sort_combo.addItem(self.tr('Mean Ascending'), 'mean ascending')
+        self.bar_sort_combo.addItem(self.tr('Mean Descending'), 'mean descending')
+        self.bar_sort_combo.addItem(self.tr('Median Ascending'), 'median ascending')
+        self.bar_sort_combo.addItem(self.tr('Median Descending'), 'median descending')
+     
         # Histogram normalization mode
         self.hist_norm_combo.clear()
         self.hist_norm_combo.addItem(self.tr('Enumerated'), '')
@@ -843,7 +853,7 @@ class DataPlotlyPanelWidget(QgsPanelWidget, WIDGET):  # pylint: disable=too-many
         if self.ptype == 'scatter':
             self.marker_size_lab.setText(self.tr('Marker size'))
             self.marker_size.setValue(10)
-
+         
         # info combo for data hovering
         self.info_combo.clear()
         self.info_combo.addItem(self.tr('All Values'), 'all')
@@ -900,6 +910,8 @@ class DataPlotlyPanelWidget(QgsPanelWidget, WIDGET):  # pylint: disable=too-many
                                         'violin'],
             self.bar_mode_lab: ['bar', 'histogram'],
             self.bar_mode_combo: ['bar', 'histogram'],
+            self.bar_sort_label: ['bar'],
+            self.bar_sort_combo: ['bar'],         
             self.legend_label: ['all'],
             self.legend_title: ['all'],
             self.legend_title_defined_button: ['all'],
@@ -1178,6 +1190,7 @@ class DataPlotlyPanelWidget(QgsPanelWidget, WIDGET):  # pylint: disable=too-many
             'range_slider': {'visible': self.range_slider_combo.isChecked(),
                              'borderwidth': 1},
             'bar_mode': self.bar_mode_combo.currentData(),
+            'bar_sort': self.bar_sort_combo.currentData(),
             'x_type': self.x_axis_mode_combo.currentData(),
             'y_type': self.y_axis_mode_combo.currentData(),
             'x_inv': None if not self.invert_x_check.isChecked() else 'reversed',
@@ -1335,6 +1348,8 @@ class DataPlotlyPanelWidget(QgsPanelWidget, WIDGET):  # pylint: disable=too-many
             settings.properties.get('box_orientation', 'v')))
         self.bar_mode_combo.setCurrentIndex(
             self.bar_mode_combo.findData(settings.layout.get('bar_mode', None)))
+        self.bar_sort_combo.setCurrentIndex(
+            self.bar_sort_combo.findData(settings.layout.get('bar_sort', None)))
         self.hist_norm_combo.setCurrentIndex(self.hist_norm_combo.findData(
             settings.properties.get('normalization', None)))
         self.box_statistic_combo.setCurrentIndex(
